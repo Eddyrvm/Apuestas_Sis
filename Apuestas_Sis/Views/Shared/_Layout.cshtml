@@ -1,258 +1,206 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Hosting
+@inject IWebHostEnvironment Env
+
+<!DOCTYPE html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-    <title>Real Hasta la Suerte</title>
+    <title>@ViewData["Title"] - Real Hasta la Suerte</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom fonts -->
+    <link rel="stylesheet" href="~/vendor/fontawesome-free/css/all.min.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-          rel="stylesheet">
+          rel="stylesheet" />
 
-    <!-- Custom styles for this template-->
-    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+    <!-- Custom styles: NO cargues min y no-min a la vez -->
+    @if (Env.IsDevelopment())
+    {
+        <link rel="stylesheet" href="~/css/sb-admin-2.css" asp-append-version="true" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/css/sb-admin-2.min.css" asp-append-version="true" />
+    }
+
+    @RenderSection("Head", required: false)
 </head>
+
 <body id="page-top">
 
-    <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <!-- Sidebar - Brand -->
+            <!-- Brand -->
             <li class="nav-item">
                 <a class="sidebar-brand d-flex align-items-center"
-                   href="@Url.Action("Index", "Home")"
+                   asp-controller="Home" asp-action="Index"
                    style="white-space: normal;">
 
-                    <!-- LOGO -->
                     <div class="sidebar-brand-icon d-flex align-items-center">
                         <img src="~/img/SUERTE_p.png"
                              alt="Real Hasta la Suerte"
                              class="img-fluid"
-                             style="max-height:80px; width:auto;">
+                             style="max-height:80px; width:auto;"
+                             loading="lazy"
+                             asp-append-version="true" />
                     </div>
 
-                    <!-- TEXTO -->
                     <div class="sidebar-brand-text ml-2"
-                         style="font-size: 14px; line-height: 1.1; max-width: 100px; white-space: normal;">
-
+                         style="font-size:14px; line-height:1.1; max-width:100px; white-space:normal;">
                         <span class="d-block">Real Hasta</span>
                         <span class="d-block">La Suerte</span>
                     </div>
                 </a>
             </li>
 
-            <!-- Divider -->
-            <li class="nav-item">
-                <hr class="sidebar-divider my-0" />
-            </li>
+            <li class="nav-item"><hr class="sidebar-divider my-0" /></li>
 
-            <!-- Nav Item - Dashboard -->
+            <!-- Inicio -->
             <li class="nav-item">
-                <a class="nav-link" href="@Url.Action("Index", "Home")">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Inicio</span>
                 </a>
             </li>
 
-            <!-- Divider -->
+            <li class="nav-item"><hr class="sidebar-divider" /></li>
+
+            <!-- Vendedores -->
             <li class="nav-item">
-                <hr class="sidebar-divider" />
+                <div class="sidebar-heading">Vendedores</div>
             </li>
 
-            <!-- Heading -->
+            <!-- Generar venta (BS4: data-toggle/data-target) -->
             <li class="nav-item">
-                <div class="sidebar-heading">
-                    Vendedores
-                </div>
-            </li>
-
-            <!-- Nav Item - Components Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGenerarVenta"
-                   aria-expanded="false" aria-controls="collapseComponents">
+                <a class="nav-link collapsed" href="#"
+                   data-toggle="collapse" data-target="#collapseGenerarVenta"
+                   aria-expanded="false" aria-controls="collapseGenerarVenta">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Generar venta</span>
                 </a>
-                <div id="collapseGenerarVenta" class="collapse" aria-labelledby="headingComponents"
-                     data-parent="#accordionSidebar">
+
+                <div id="collapseGenerarVenta" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="buttons.html">Nueva</a>
-                        <a class="collapse-item" href="cards.html">Reimprimir</a>
-                        <a class="collapse-item" href="cards.html">Reporte</a>
+                        <a class="collapse-item" asp-controller="Ventas" asp-action="Nueva">Nueva</a>
+                        <a class="collapse-item" asp-controller="Ventas" asp-action="Reimprimir">Reimprimir</a>
+                        <a class="collapse-item" asp-controller="Ventas" asp-action="Reporte">Reporte</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Divider -->
+            <li class="nav-item"><hr class="sidebar-divider" /></li>
+
+            <!-- Administración -->
             <li class="nav-item">
-                <hr class="sidebar-divider" />
+                <div class="sidebar-heading">Administración</div>
             </li>
 
-            <!-- Heading -->
             <li class="nav-item">
-                <div class="sidebar-heading">
-                    Administración
-                </div>
-            </li>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                @* Está colapsado por defecto *@
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVendedores"
-                   aria-expanded="false" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#"
+                   data-toggle="collapse" data-target="#collapseUsuarios"
+                   aria-expanded="false" aria-controls="collapseUsuarios">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Usuarios</span>
                 </a>
-                <div id="collapseVendedores" class="collapse" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
+
+                <div id="collapseUsuarios" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Registrados:</h6>
-                        <a class="collapse-item" href="@Url.Action("Index", "Usuarios")">Gestionar</a>
+                        <a class="collapse-item" asp-controller="Usuarios" asp-action="Index">Gestionar</a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
-                @* Está colapsado por defecto *@
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSorteo"
-                   aria-expanded="false" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#"
+                   data-toggle="collapse" data-target="#collapseSorteo"
+                   aria-expanded="false" aria-controls="collapseSorteo">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Sorteo/Resultados</span>
                 </a>
-                <div id="collapseSorteo" class="collapse" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
+
+                <div id="collapseSorteo" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <a class="collapse-item" asp-controller="Sorteos" asp-action="Index">Sorteos</a>
+                        <a class="collapse-item" asp-controller="Resultados" asp-action="Index">Resultados</a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
-                @* Está colapsado por defecto *@
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReportes"
-                   aria-expanded="false" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#"
+                   data-toggle="collapse" data-target="#collapseReportes"
+                   aria-expanded="false" aria-controls="collapseReportes">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Reportes</span>
                 </a>
-                <div id="collapseReportes" class="collapse" aria-labelledby="headingPages"
-                     data-parent="#accordionSidebar">
+
+                <div id="collapseReportes" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                        <a class="collapse-item" asp-controller="Reportes" asp-action="Ventas">Ventas</a>
+                        <a class="collapse-item" asp-controller="Reportes" asp-action="Comisiones">Comisiones</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Tables -->
-            <!--<li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span>
-                </a>
-            </li>-->
-            <!-- Divider -->
-            <li class="nav-item">
-                <hr class="sidebar-divider d-none d-md-block" />
-            </li>
+            <li class="nav-item"><hr class="sidebar-divider d-none d-md-block" /></li>
 
-            <!-- Sidebar Toggler (Sidebar) -->
             <li class="nav-item w-100">
                 <div class="d-flex justify-content-center align-items-center py-2">
-                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                    <button class="rounded-circle border-0" id="sidebarToggle" type="button"></button>
                 </div>
             </li>
         </ul>
-        <!-- End of Sidebar -->
+        <!-- End Sidebar -->
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
             <div id="content">
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" type="button">
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <!-- Search -->
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+                          asp-controller="Ventas" asp-action="Buscar" method="get">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar venta por código..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
+                            <input name="codigo" type="text"
+                                   class="form-control bg-light border-0 small"
+                                   placeholder="Buscar venta por código..." />
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
 
-                    <!-- Topbar Navbar -->
+                    <!-- Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                 aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                               placeholder="Search for..." aria-label="Search"
-                                               aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
+                        <!-- Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
-                            <!-- Dropdown - Alerts -->
+
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
+                                <h6 class="dropdown-header">Alerts Center</h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
@@ -261,105 +209,24 @@
                                     </div>
                                     <div>
                                         <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
+                                        <span class="font-weight-bold">A new monthly report is ready!</span>
                                     </div>
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
                         </li>
 
-                        <!-- Nav Item - Messages -->
+                        <!-- Messages -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
                                 <span class="badge badge-danger badge-counter">7</span>
                             </a>
-                            <!-- Dropdown - Messages -->
+
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="~/img/undraw_profile_1.svg"
-                                             alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">
-                                            Hi there! I am wondering if you can help me with a
-                                            problem I've been having.
-                                        </div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="~/img/undraw_profile_2.svg"
-                                             alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">
-                                            I have the photos that you ordered last month, how
-                                            would you like them sent to you?
-                                        </div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="~/img/undraw_profile_3.svg"
-                                             alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">
-                                            Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!
-                                        </div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                             alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">
-                                            Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...
-                                        </div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
+                                <h6 class="dropdown-header">Message Center</h6>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
                         </li>
@@ -368,73 +235,66 @@
                             <div class="topbar-divider d-none d-sm-block"></div>
                         </li>
 
+                        <!-- Usuario -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                    Usuario
-                                </span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Usuario</span>
                                 <img class="img-profile rounded-circle"
-                                     src="~/img/undraw_profile.svg">
+                                     src="~/img/undraw_profile.svg"
+                                     loading="lazy"
+                                     asp-append-version="true" />
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Perfil
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
                                 </a>
-
                                 <div class="dropdown-divider"></div>
-
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Salir
+                                <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Salir
                                 </a>
                             </div>
                         </li>
 
-
                     </ul>
                 </nav>
-                <!-- End of Topbar -->
-                <!-- Begin Page Content -->
+
                 <div class="container-fluid">
                     @RenderBody()
                 </div>
-                <!-- /.container-fluid -->
             </div>
-            <!-- End of Main Content -->
+
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; 2025 <strong>Real Hasta la Suerte </strong> - Desarrollador: <strong>ERVM</strong></span>
+                        <span>Copyright &copy; 2025 <strong>Real Hasta la Suerte</strong> - Desarrollador: <strong>ERVM</strong></span>
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
         </div>
-        <!-- End of Content Wrapper -->
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
+
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Logout Modal-->
-    @* tu modal de logout, igual que lo tenías *@
+    <!-- JS: orden crítico para SB Admin 2 (Bootstrap 4) -->
+    <script src="~/vendor/jquery/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js" asp-append-version="true"></script>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="~/vendor/jquery/jquery.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    @if (Env.IsDevelopment())
+    {
+        <script src="~/js/sb-admin-2.js" asp-append-version="true"></script>
+    }
+    else
+    {
+        <script src="~/js/sb-admin-2.min.js" asp-append-version="true"></script>
+    }
 
-    <!-- Core plugin JavaScript-->
-    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="~/js/sb-admin-2.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
