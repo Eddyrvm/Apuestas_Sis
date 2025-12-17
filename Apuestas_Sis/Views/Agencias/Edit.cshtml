@@ -1,0 +1,84 @@
+﻿@model Apuestas_Sis.Models.Agencia
+
+@{
+    ViewData["Title"] = "Editar Agencia";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Editar Agencia</h1>
+    <a asp-action="Index" class="btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+        Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Actualización de Agencia</h6>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Edit" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <input type="hidden" asp-for="AgenciaId" />
+
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label asp-for="Nombre"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label class="d-block">&nbsp;</label>
+                            <div class="custom-control custom-checkbox mt-2">
+                                <input asp-for="Activo" class="custom-control-input" id="chkActivo" />
+                                <label class="custom-control-label" for="chkActivo">
+                                    @Html.DisplayNameFor(m => m.Activo)
+                                </label>
+                            </div>
+                            <span asp-validation-for="Activo" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Direccion"></label>
+                        <input asp-for="Direccion" class="form-control" />
+                        <span asp-validation-for="Direccion" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="FechaRegistro"></label>
+                        <input asp-for="FechaRegistro" class="form-control" readonly />
+                        <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+                        <small class="form-text text-muted">
+                            Fecha generada automáticamente.
+                        </small>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-end">
+                        <a asp-action="Index" class="btn btn-secondary mr-2">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

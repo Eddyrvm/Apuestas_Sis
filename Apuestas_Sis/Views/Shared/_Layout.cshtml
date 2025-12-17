@@ -18,6 +18,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet" />
+    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
 
     <!-- Custom styles: NO cargues min y no-min a la vez -->
     @if (Env.IsDevelopment())
@@ -114,8 +116,43 @@
 
                 <div id="collapseUsuarios" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registrados:</h6>
-                        <a class="collapse-item" asp-controller="Usuarios" asp-action="Index">Gestionar</a>
+                        <h6 class="collapse-header">Registros:</h6>
+                        <a class="collapse-item" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                        <a class="collapse-item" asp-controller="Rols" asp-action="Index">Roles</a>
+                        <a class="collapse-item" asp-controller="Agencias" asp-action="Index">Agencias</a>
+                        <a class="collapse-item" asp-controller="UsuarioRols" asp-action="Index">Asignar rol</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#"
+                   data-toggle="collapse" data-target="#collapseAgencias"
+                   aria-expanded="false" aria-controls="collapseAgencias">
+                    <i class="fas fa-solid fa-store"></i>
+                    <span>Agencias</span>
+                </a>
+
+                <div id="collapseAgencias" class="collapse" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registros:</h6>
+                        <a class="collapse-item" asp-controller="Agencias" asp-action="Index">Gestionar</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#"
+                   data-toggle="collapse" data-target="#collapseRoles"
+                   aria-expanded="false" aria-controls="collapseAgencias">
+                    <i class="fas fa-regular fa-address-book"></i>
+                    <span>Roles</span>
+                </a>
+
+                <div id="collapseRoles" class="collapse" data-parent="#collapseRoles">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registros:</h6>
+                        <a class="collapse-item" asp-controller="Rols" asp-action="Index">Roles</a>
                     </div>
                 </div>
             </li>
@@ -285,6 +322,11 @@
     <script src="~/vendor/jquery/jquery.min.js" asp-append-version="true"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="~/vendor/jquery-easing/jquery.easing.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
 
     @if (Env.IsDevelopment())
     {
@@ -296,5 +338,6 @@
     }
 
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

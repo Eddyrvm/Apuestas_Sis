@@ -4,6 +4,7 @@ using Apuestas_Sis.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Apuestas_Sis.Migrations
 {
     [DbContext(typeof(ApuestasDataContext))]
-    partial class ApuestasDataContextModelSnapshot : ModelSnapshot
+    [Migration("20251217150610_Add_UsuarioAgencia_UsuarioRol")]
+    partial class Add_UsuarioAgencia_UsuarioRol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

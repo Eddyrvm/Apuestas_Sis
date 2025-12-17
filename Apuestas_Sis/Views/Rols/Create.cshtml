@@ -1,0 +1,60 @@
+﻿@model Apuestas_Sis.Models.Rol
+
+@{
+    ViewData["Title"] = "Crear Rol";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Crear Rol</h1>
+    <a asp-action="Index" class="btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+        Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Registro de Rol</h6>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Nombre"></label>
+                        <input asp-for="Nombre" class="form-control" placeholder="Ej: ADMIN_SISTEMA, VENDEDOR, CAJERO" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Activo" class="custom-control-input" id="chkActivo" />
+                            <label class="custom-control-label" for="chkActivo">
+                                @Html.DisplayNameFor(m => m.Activo)
+                            </label>
+                        </div>
+                        <span asp-validation-for="Activo" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-end">
+                        <a asp-action="Index" class="btn btn-secondary mr-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

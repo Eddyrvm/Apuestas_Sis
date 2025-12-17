@@ -1,0 +1,123 @@
+﻿@model Apuestas_Sis.Models.UsuarioRol
+
+@{
+    ViewData["Title"] = "Asignar Rol";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Asignar Rol</h1>
+    <a asp-action="Index" class="btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+        Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Registro de asignación</h6>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Usuario -->
+                    <div class="form-group">
+                        <label asp-for="UsuarioId" class="control-label"></label>
+                        <select asp-for="UsuarioId"
+                                class="custom-select"
+                                asp-items="ViewBag.UsuarioId">
+                            <option value="">-- Seleccione un usuario --</option>
+                        </select>
+                        <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Rol -->
+                    <div class="form-group">
+                        <label asp-for="RolId" class="control-label"></label>
+                        <select asp-for="RolId"
+                                class="custom-select"
+                                asp-items="ViewBag.RolId">
+                            <option value="">-- Seleccione un rol --</option>
+                        </select>
+                        <span asp-validation-for="RolId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Agencia -->
+                    <div class="form-group">
+                        <label asp-for="AgenciaId" class="control-label"></label>
+                        <select asp-for="AgenciaId"
+                                class="custom-select"
+                                asp-items="ViewBag.AgenciaId"
+                                id="AgenciaSelect">
+                            <option value="">-- Seleccione una agencia --</option>
+                        </select>
+                        <small class="form-text text-muted">
+                            Seleccione una agencia cuando el rol no sea global.
+                        </small>
+                        <span asp-validation-for="AgenciaId" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-row">
+                        <div class="col-md-6 mb-2">
+                            <div class="custom-control custom-checkbox">
+                                <input asp-for="EsGlobal" class="custom-control-input" id="EsGlobalCheck" />
+                                <label class="custom-control-label" for="EsGlobalCheck">
+                                    Rol global (Administrador)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <div class="custom-control custom-checkbox">
+                                <input asp-for="Activo" class="custom-control-input" id="ActivoCheck" />
+                                <label class="custom-control-label" for="ActivoCheck">
+                                    Activo
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save fa-sm"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        (function () {
+            var chkGlobal = document.getElementById('EsGlobalCheck');
+            var agenciaSelect = document.getElementById('AgenciaSelect');
+
+            function toggleAgencia() {
+                if (chkGlobal && chkGlobal.checked) {
+                    agenciaSelect.value = '';
+                    agenciaSelect.setAttribute('disabled', 'disabled');
+                } else {
+                    agenciaSelect.removeAttribute('disabled');
+                }
+            }
+
+            if (chkGlobal) {
+                chkGlobal.addEventListener('change', toggleAgencia);
+                toggleAgencia();
+            }
+        })();
+    </script>
+}
+
