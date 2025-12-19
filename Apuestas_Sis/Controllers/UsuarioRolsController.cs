@@ -66,55 +66,61 @@ namespace Apuestas_Sis.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UsuarioRol usuarioRol)
         {
-            // ===== Reglas de negocio =====
-
+            // 1) Reglas Global/Agencia + FORZAR Administrador
             if (usuarioRol.EsGlobal)
             {
-                // Rol global NO debe tener agencia
                 usuarioRol.AgenciaId = null;
+
+                var rolAdminId = await ObtenerRolAdministradorIdAsync();
+                if (rolAdminId == Guid.Empty)
+                {
+                    ModelState.AddModelError(string.Empty,
+                        "No existe el rol 'Administrador' en la base de datos. Cree el rol e intente nuevamente.");
+                }
+                else
+                {
+                    usuarioRol.RolId = rolAdminId; // FORZADO
+                }
             }
             else
             {
                 if (usuarioRol.AgenciaId == null)
-                {
                     ModelState.AddModelError(nameof(UsuarioRol.AgenciaId),
                         "Debe seleccionar una agencia cuando el rol no es global.");
-                }
+
+                if (usuarioRol.RolId == Guid.Empty)
+                    ModelState.AddModelError(nameof(UsuarioRol.RolId),
+                        "El rol es obligatorio.");
             }
 
-            // Auditoría controlada en servidor
+            // 2) Regla: si ya tiene Global activo, no permitir más asignaciones
+            var yaTieneGlobalActivo = await _context.UsuarioRoles.AnyAsync(x =>
+                x.UsuarioId == usuarioRol.UsuarioId &&
+                x.Activo &&
+                x.EsGlobal &&
+                x.AgenciaId == null);
+
+            if (yaTieneGlobalActivo)
+            {
+                ModelState.AddModelError(string.Empty,
+                    "El usuario ya tiene un rol GLOBAL activo. No se permiten asignaciones adicionales.");
+            }
+
+            // 3) Auditoría
             usuarioRol.FechaAsignacion = DateTime.Now;
             usuarioRol.FechaDesactivacion = usuarioRol.Activo ? null : DateTime.Now;
 
-            // ===== Evitar duplicados (antes de guardar) =====
+            // 4) Duplicados
             if (ModelState.IsValid)
             {
-                bool existe;
-
-                if (usuarioRol.EsGlobal)
-                {
-                    existe = await _context.UsuarioRoles.AnyAsync(x =>
-                        x.UsuarioId == usuarioRol.UsuarioId &&
-                        x.RolId == usuarioRol.RolId &&
-                        x.EsGlobal &&
-                        x.AgenciaId == null
-                    );
-                }
-                else
-                {
-                    existe = await _context.UsuarioRoles.AnyAsync(x =>
-                        x.UsuarioId == usuarioRol.UsuarioId &&
-                        x.RolId == usuarioRol.RolId &&
-                        !x.EsGlobal &&
-                        x.AgenciaId == usuarioRol.AgenciaId
-                    );
-                }
+                var existe = await _context.UsuarioRoles.AnyAsync(x =>
+                    x.UsuarioId == usuarioRol.UsuarioId &&
+                    x.RolId == usuarioRol.RolId &&
+                    x.EsGlobal == usuarioRol.EsGlobal &&
+                    x.AgenciaId == (usuarioRol.EsGlobal ? null : usuarioRol.AgenciaId));
 
                 if (existe)
-                {
-                    ModelState.AddModelError(string.Empty,
-                        "Ya existe una asignación del mismo rol para este usuario.");
-                }
+                    ModelState.AddModelError(string.Empty, "Ya existe una asignación del mismo rol para este usuario.");
             }
 
             if (!ModelState.IsValid)
@@ -123,13 +129,11 @@ namespace Apuestas_Sis.Controllers
                 return View(usuarioRol);
             }
 
-            // PK (solo por seguridad)
             if (usuarioRol.UsuarioRolId == Guid.Empty)
                 usuarioRol.UsuarioRolId = Guid.NewGuid();
 
             _context.UsuarioRoles.Add(usuarioRol);
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -167,98 +171,88 @@ namespace Apuestas_Sis.Controllers
         {
             if (id != usuarioRol.UsuarioRolId) return NotFound();
 
-            var entity = await _context.UsuarioRoles
-                .FirstOrDefaultAsync(x => x.UsuarioRolId == id);
-
+            var entity = await _context.UsuarioRoles.FirstOrDefaultAsync(x => x.UsuarioRolId == id);
             if (entity == null) return NotFound();
 
-            // ===== Reglas de negocio =====
+            // 1) Reglas Global/Agencia + FORZAR Administrador
             if (usuarioRol.EsGlobal)
             {
-                usuarioRol.AgenciaId = null; // global => sin agencia
+                usuarioRol.AgenciaId = null;
+
+                var rolAdminId = await ObtenerRolAdministradorIdAsync();
+                if (rolAdminId == Guid.Empty)
+                {
+                    ModelState.AddModelError(string.Empty,
+                        "No existe el rol 'Administrador' en la base de datos. Cree el rol e intente nuevamente.");
+                }
+                else
+                {
+                    usuarioRol.RolId = rolAdminId; // FORZADO
+                }
             }
             else
             {
                 if (usuarioRol.AgenciaId == null)
-                {
                     ModelState.AddModelError(nameof(UsuarioRol.AgenciaId),
                         "Debe seleccionar una agencia cuando el rol no es global.");
-                }
+
+                if (usuarioRol.RolId == Guid.Empty)
+                    ModelState.AddModelError(nameof(UsuarioRol.RolId),
+                        "El rol es obligatorio.");
             }
 
-            // ===== Evitar duplicados (excluye el actual) =====
+            // 2) Regla: si hay Global activo, solo permitir editar/desactivar la asignación Global
+            var usuarioTieneGlobalActivo = await _context.UsuarioRoles.AnyAsync(x =>
+                x.UsuarioId == usuarioRol.UsuarioId &&
+                x.Activo &&
+                x.EsGlobal &&
+                x.AgenciaId == null);
+
+            var esteRegistroEsGlobal = entity.EsGlobal && entity.AgenciaId == null;
+
+            if (usuarioTieneGlobalActivo && !esteRegistroEsGlobal)
+            {
+                ModelState.AddModelError(string.Empty,
+                    "El usuario tiene un rol GLOBAL activo. Solo se permite editar/desactivar la asignación GLOBAL.");
+            }
+
+            // 3) Duplicados (excluye el actual)
             if (ModelState.IsValid)
             {
-                bool existe;
-
-                if (usuarioRol.EsGlobal)
-                {
-                    existe = await _context.UsuarioRoles.AnyAsync(x =>
-                        x.UsuarioRolId != id &&
-                        x.UsuarioId == usuarioRol.UsuarioId &&
-                        x.RolId == usuarioRol.RolId &&
-                        x.EsGlobal == true &&
-                        x.AgenciaId == null
-                    );
-                }
-                else
-                {
-                    existe = await _context.UsuarioRoles.AnyAsync(x =>
-                        x.UsuarioRolId != id &&
-                        x.UsuarioId == usuarioRol.UsuarioId &&
-                        x.RolId == usuarioRol.RolId &&
-                        x.EsGlobal == false &&
-                        x.AgenciaId == usuarioRol.AgenciaId
-                    );
-                }
+                var existe = await _context.UsuarioRoles.AnyAsync(x =>
+                    x.UsuarioRolId != id &&
+                    x.UsuarioId == usuarioRol.UsuarioId &&
+                    x.RolId == usuarioRol.RolId &&
+                    x.EsGlobal == usuarioRol.EsGlobal &&
+                    x.AgenciaId == (usuarioRol.EsGlobal ? null : usuarioRol.AgenciaId));
 
                 if (existe)
-                {
-                    ModelState.AddModelError(string.Empty,
-                        "Ya existe una asignación del mismo rol para este usuario.");
-                }
+                    ModelState.AddModelError(string.Empty, "Ya existe una asignación del mismo rol para este usuario.");
             }
 
             if (!ModelState.IsValid)
             {
-                // Recargar combos dentro de la misma acción
-                ViewData["AgenciaId"] = new SelectList(
-                    await _context.Agencias.AsNoTracking().ToListAsync(),
-                    "AgenciaId", "Nombre", usuarioRol.AgenciaId);
-
-                ViewData["RolId"] = new SelectList(
-                    await _context.Roles.AsNoTracking().ToListAsync(),
-                    "RolId", "Nombre", usuarioRol.RolId);
-
-                ViewData["UsuarioId"] = new SelectList(
-                    await _context.Usuarios.AsNoTracking()
-                        .Select(u => new { u.UsuarioId, Nombre = u.Apellidos + " " + u.Nombres })
-                        .ToListAsync(),
+                // Recargar combos
+                ViewData["AgenciaId"] = new SelectList(await _context.Agencias.AsNoTracking().ToListAsync(), "AgenciaId", "Nombre", usuarioRol.AgenciaId);
+                ViewData["RolId"] = new SelectList(await _context.Roles.AsNoTracking().ToListAsync(), "RolId", "Nombre", usuarioRol.RolId);
+                ViewData["UsuarioId"] = new SelectList(await _context.Usuarios.AsNoTracking()
+                    .Select(u => new { u.UsuarioId, Nombre = u.Apellidos + " " + u.Nombres }).ToListAsync(),
                     "UsuarioId", "Nombre", usuarioRol.UsuarioId);
 
                 return View(usuarioRol);
             }
 
-            // ===== Actualización controlada (sin overposting) =====
+            // 4) Actualización controlada
             entity.UsuarioId = usuarioRol.UsuarioId;
-            entity.RolId = usuarioRol.RolId;
+            entity.RolId = usuarioRol.RolId;          // (Admin si Global)
             entity.EsGlobal = usuarioRol.EsGlobal;
             entity.AgenciaId = usuarioRol.AgenciaId;
             entity.Activo = usuarioRol.Activo;
 
-            // Fechas automáticas
             entity.FechaDesactivacion = entity.Activo ? null : (entity.FechaDesactivacion ?? DateTime.Now);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioRolExists(entity.UsuarioRolId)) return NotFound();
-                throw;
-            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: UsuarioRols/Delete/5
@@ -300,6 +294,15 @@ namespace Apuestas_Sis.Controllers
         private bool UsuarioRolExists(Guid id)
         {
             return _context.UsuarioRoles.Any(e => e.UsuarioRolId == id);
+        }
+
+        private async Task<Guid> ObtenerRolAdministradorIdAsync()
+        {
+            return await _context.Roles
+                .AsNoTracking()
+                .Where(r => r.Nombre.ToLower() == "administrador")
+                .Select(r => r.RolId)
+                .FirstOrDefaultAsync();
         }
 
         private void CargarCombos(UsuarioRol? model = null)

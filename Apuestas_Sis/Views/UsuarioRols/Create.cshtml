@@ -37,9 +37,7 @@
                     <!-- Rol -->
                     <div class="form-group">
                         <label asp-for="RolId" class="control-label"></label>
-                        <select asp-for="RolId"
-                                class="custom-select"
-                                asp-items="ViewBag.RolId">
+                        <select asp-for="RolId" id="RolSelect" class="custom-select" asp-items="ViewBag.RolId">
                             <option value="">-- Seleccione un rol --</option>
                         </select>
                         <span asp-validation-for="RolId" class="text-danger"></span>
@@ -48,16 +46,14 @@
                     <!-- Agencia -->
                     <div class="form-group">
                         <label asp-for="AgenciaId" class="control-label"></label>
-                        <select asp-for="AgenciaId"
-                                class="custom-select"
-                                asp-items="ViewBag.AgenciaId"
-                                id="AgenciaSelect">
+                        <select asp-for="AgenciaId" id="AgenciaSelect" class="custom-select" asp-items="ViewBag.AgenciaId">
                             <option value="">-- Seleccione una agencia --</option>
                         </select>
                         <small class="form-text text-muted">
                             Seleccione una agencia cuando el rol no sea global.
                         </small>
                         <span asp-validation-for="AgenciaId" class="text-danger"></span>
+                        <small id="RolHelp" class="form-text text-muted"></small>
                     </div>
 
                     <hr />
@@ -103,21 +99,43 @@
         (function () {
             var chkGlobal = document.getElementById('EsGlobalCheck');
             var agenciaSelect = document.getElementById('AgenciaSelect');
+            var rolSelect = document.getElementById('RolSelect');
+            var rolHelp = document.getElementById('RolHelp'); // opcional
 
-            function toggleAgencia() {
-                if (chkGlobal && chkGlobal.checked) {
-                    agenciaSelect.value = '';
-                    agenciaSelect.setAttribute('disabled', 'disabled');
-                } else {
-                    agenciaSelect.removeAttribute('disabled');
+            function toggleGlobal() {
+                var isGlobal = chkGlobal && chkGlobal.checked;
+
+                // Agencia
+                if (agenciaSelect) {
+                    if (isGlobal) {
+                        agenciaSelect.value = '';
+                        agenciaSelect.setAttribute('disabled', 'disabled');
+                    } else {
+                        agenciaSelect.removeAttribute('disabled');
+                    }
+                }
+
+                // Rol
+                if (rolSelect) {
+                    if (isGlobal) {
+                        rolSelect.value = '';
+                        rolSelect.setAttribute('disabled', 'disabled');
+                        if (rolHelp) rolHelp.innerText = "Rol asignado automáticamente: Administrador (Global).";
+                    } else {
+                        rolSelect.removeAttribute('disabled');
+                        if (rolHelp) rolHelp.innerText = "";
+                    }
                 }
             }
 
             if (chkGlobal) {
-                chkGlobal.addEventListener('change', toggleAgencia);
-                toggleAgencia();
+                chkGlobal.addEventListener('change', toggleGlobal);
             }
+
+            // Inicializar al cargar
+            toggleGlobal();
         })();
     </script>
 }
+
 

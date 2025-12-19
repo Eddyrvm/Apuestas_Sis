@@ -1,0 +1,75 @@
+﻿@model Apuestas_Sis.Models.UsuarioAgencia
+
+@{
+    ViewData["Title"] = "Editar Asignación Usuario - Agencia";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Editar Asignación</h1>
+    <a asp-action="Index" class="btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+        Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Actualizar estado</h6>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Edit" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- PK compuesta -->
+                    <input type="hidden" asp-for="UsuarioId" />
+                    <input type="hidden" asp-for="AgenciaId" />
+
+                    <!-- (Opcional) mostrar a modo informativo -->
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Usuario</label>
+                        <div class="form-control bg-light">
+                            @Model.Usuario.Apellidos @Model.Usuario.Nombres
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label font-weight-bold">Agencia</label>
+                        <div class="form-control bg-light">
+                            @Model.Agencia.Nombre
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Activo" class="custom-control-input" id="ActivoCheck" />
+                            <label class="custom-control-label" for="ActivoCheck">
+                                Activo
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">
+                            Al desactivar se registrará la fecha de desactivación automáticamente.
+                        </small>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save fa-sm"></i>
+                            Guardar cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

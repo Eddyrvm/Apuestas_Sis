@@ -8,12 +8,14 @@ public class UsuarioRol
     [Key]
     public Guid UsuarioRolId { get; set; } = Guid.NewGuid();
 
-    [Required(ErrorMessage = "El usuario es obligatorio.")]
+    [Display(Name = "Usuario")]
     public Guid UsuarioId { get; set; }
 
     // null si EsGlobal=true
+    [Display(Name = "Agencia")]
     public Guid? AgenciaId { get; set; }
 
+    [Display(Name = "Rol")]
     [Required(ErrorMessage = "El rol es obligatorio.")]
     public Guid RolId { get; set; }
 

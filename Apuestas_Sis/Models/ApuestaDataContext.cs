@@ -10,7 +10,6 @@ public class ApuestasDataContext : DbContext
     public DbSet<Usuario> Usuarios { get; set; } = default!;
     public DbSet<Agencia> Agencias { get; set; } = default!;
     public DbSet<Rol> Roles { get; set; } = default!;
-
     public DbSet<UsuarioAgencia> UsuarioAgencias { get; set; } = default!;
     public DbSet<UsuarioRol> UsuarioRoles { get; set; } = default!;
 
