@@ -44,11 +44,13 @@
                     <div class="form-group">
                         <label asp-for="RolId" class="control-label"></label>
                         <select asp-for="RolId"
+                                id="RolSelect"
                                 class="custom-select"
                                 asp-items="ViewBag.RolId">
                             <option value="">-- Seleccione un rol --</option>
                         </select>
                         <span asp-validation-for="RolId" class="text-danger"></span>
+                        <small id="RolHelp" class="form-text text-muted"></small>
                     </div>
 
                     <!-- Agencia -->
@@ -110,20 +112,42 @@
         (function () {
             var chkGlobal = document.getElementById('EsGlobalCheck');
             var agenciaSelect = document.getElementById('AgenciaSelect');
+            var rolSelect = document.getElementById('RolSelect');
+            var rolHelp = document.getElementById('RolHelp');
 
-            function toggleAgencia() {
-                if (chkGlobal && chkGlobal.checked) {
-                    agenciaSelect.value = '';
-                    agenciaSelect.setAttribute('disabled', 'disabled');
-                } else {
-                    agenciaSelect.removeAttribute('disabled');
+            function toggleGlobal() {
+                var isGlobal = chkGlobal && chkGlobal.checked;
+
+                // Agencia
+                if (agenciaSelect) {
+                    if (isGlobal) {
+                        agenciaSelect.value = '';
+                        agenciaSelect.setAttribute('disabled', 'disabled');
+                    } else {
+                        agenciaSelect.removeAttribute('disabled');
+                    }
+                }
+
+                // Rol
+                if (rolSelect) {
+                    if (isGlobal) {
+                        rolSelect.value = '';
+                        rolSelect.setAttribute('disabled', 'disabled');
+                        if (rolHelp) rolHelp.innerText = "Rol asignado automáticamente: Administrador (Global).";
+                    } else {
+                        rolSelect.removeAttribute('disabled');
+                        if (rolHelp) rolHelp.innerText = "";
+                    }
                 }
             }
 
             if (chkGlobal) {
-                chkGlobal.addEventListener('change', toggleAgencia);
-                toggleAgencia();
+                chkGlobal.addEventListener('change', toggleGlobal);
             }
+
+            // Inicializar estado al cargar (incluye cuando llega EsGlobal=true desde BD)
+            toggleGlobal();
         })();
     </script>
 }
+

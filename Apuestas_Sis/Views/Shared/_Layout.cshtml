@@ -274,27 +274,50 @@
                         </li>
 
                         <!-- Usuario -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Usuario</span>
-                                <img class="img-profile rounded-circle"
-                                     src="~/img/undraw_profile.svg"
-                                     loading="lazy"
-                                     asp-append-version="true" />
-                            </a>
+                        @if (string.IsNullOrWhiteSpace(Context.Session.GetString("UsuarioId")))
+                        {
+                            <!-- NO autenticado -->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">
+                                    <i class="fas fa-user"></i> Ingresar
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- AUTENTICADO -->
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                        @Context.Session.GetString("NombreCompleto")
+                                    </span>
+                                    <img class="img-profile rounded-circle"
+                                         src="~/img/undraw_profile.svg">
+                                </a>
 
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Perfil
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Salir
-                                </a>
-                            </div>
-                        </li>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Perfil
+                                    </a>
+
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Ajustes
+                                    </a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Salir
+                                    </a>
+                                </div>
+                            </li>
+                        }
+
 
                     </ul>
                 </nav>
@@ -323,11 +346,10 @@
     <script src="~/vendor/jquery/jquery.min.js" asp-append-version="true"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="~/vendor/jquery-easing/jquery.easing.min.js" asp-append-version="true"></script>
-    <script src="~/vendor/jquery/jquery.min.js"></script>
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
+    <!-- (Opcional) DataTables: debe ir después de jQuery y Bootstrap -->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
 
     @if (Env.IsDevelopment())
     {
@@ -339,6 +361,7 @@
     }
 
     @RenderSection("Scripts", required: false)
+
 
 </body>
 </html>
