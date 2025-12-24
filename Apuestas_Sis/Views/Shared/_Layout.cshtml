@@ -1,6 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Hosting
 @inject IWebHostEnvironment Env
 
+@{
+    var roles = (Context.Session.GetString("Roles") ?? "")
+        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -102,6 +107,8 @@
             <li class="nav-item"><hr class="sidebar-divider" /></li>
 
             <!-- Administración -->
+            @if (roles.Contains("administrador"))
+            {
             <li class="nav-item">
                 <div class="sidebar-heading">Administración</div>
             </li>
@@ -114,6 +121,7 @@
                     <span>Usuarios</span>
                 </a>
 
+
                 <div id="collapseUsuarios" class="collapse" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Registros:</h6>
@@ -125,7 +133,7 @@
                     </div>
                 </div>
             </li>
-
+            }
 @*             <li class="nav-item">
                 <a class="nav-link collapsed" href="#"
                    data-toggle="collapse" data-target="#collapseAgencias"
@@ -310,10 +318,14 @@
 
                                     <div class="dropdown-divider"></div>
 
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Salir
-                                    </a>
+                                    <form asp-controller="Account" asp-action="Logout" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Salir
+                                        </button>
+                                    </form>
+
                                 </div>
                             </li>
                         }
