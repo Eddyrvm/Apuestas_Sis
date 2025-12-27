@@ -1,11 +1,12 @@
-﻿using Apuestas_Sis.Models;
+﻿using Apuestas_Sis.Filters;
+using Apuestas_Sis.Models;
 using Apuestas_Sis.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Apuestas_Sis.Controllers
 {
-    public class UsuariosController : Controller
+    public class UsuariosController : BaseController
     {
         private readonly ApuestasDataContext _context;
 
@@ -14,13 +15,13 @@ namespace Apuestas_Sis.Controllers
             _context = context;
         }
 
-        // GET: Usuarios
+        [RoleAuthorize("VENDEDOR", "administrador")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Usuarios.ToListAsync());
         }
 
-        // GET: Usuarios/Create
+        [RoleAuthorize("administrador")]
         public IActionResult Create()
         {
             return View(new UsuarioCreateVm { Activo = true });
