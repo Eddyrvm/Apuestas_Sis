@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Apuestas_Sis.Controllers
 {
+    [RoleAuthorize("administrador")]
     public class UsuariosController : BaseController
     {
         private readonly ApuestasDataContext _context;
@@ -15,13 +16,11 @@ namespace Apuestas_Sis.Controllers
             _context = context;
         }
 
-        [RoleAuthorize("VENDEDOR", "administrador")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Usuarios.ToListAsync());
         }
 
-        [RoleAuthorize("administrador")]
         public IActionResult Create()
         {
             return View(new UsuarioCreateVm { Activo = true });

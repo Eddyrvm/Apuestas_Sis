@@ -1,9 +1,11 @@
-﻿using Apuestas_Sis.Models;
+﻿using Apuestas_Sis.Filters;
+using Apuestas_Sis.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Apuestas_Sis.Controllers
 {
+    [RoleAuthorize("administrador")]
     public class RolsController : Controller
     {
         private readonly ApuestasDataContext _context;

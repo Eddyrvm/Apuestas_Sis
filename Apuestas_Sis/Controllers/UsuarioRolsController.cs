@@ -1,4 +1,5 @@
-﻿using Apuestas_Sis.Models;
+﻿using Apuestas_Sis.Filters;
+using Apuestas_Sis.Models;
 using Apuestas_Sis.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Apuestas_Sis.Controllers
 {
+    [RoleAuthorize("administrador")]
     public class UsuarioRolsController : Controller
     {
         private readonly ApuestasDataContext _context;
