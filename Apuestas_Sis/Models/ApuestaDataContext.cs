@@ -13,6 +13,8 @@ public class ApuestasDataContext : DbContext
     public DbSet<UsuarioAgencia> UsuarioAgencias { get; set; } = default!;
     public DbSet<UsuarioRol> UsuarioRoles { get; set; } = default!;
 
+    public DbSet<TipoJuego> TipoJuego { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

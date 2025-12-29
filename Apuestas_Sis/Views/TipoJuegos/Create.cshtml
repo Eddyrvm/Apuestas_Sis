@@ -1,0 +1,75 @@
+﻿@model Apuestas_Sis.Models.TipoJuego
+
+@{
+    ViewData["Title"] = "Crear Tipo de Juego";
+}
+
+<div class="container-fluid">
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Crear Tipo de Juego</h6>
+            <a asp-action="Index" class="btn btn-sm btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- Nombre -->
+                <div class="form-group row">
+                    <label asp-for="Nombre" class="col-md-3 col-form-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="form-group row">
+                    <label asp-for="Descripcion" class="col-md-3 col-form-label"></label>
+                    <div class="col-md-9">
+                        <textarea asp-for="Descripcion" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Activo -->
+                <div class="form-group row">
+                    <label asp-for="Activo" class="col-md-3 col-form-label"></label>
+                    <div class="col-md-9 d-flex align-items-center">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Activo" class="custom-control-input" id="chkActivo" />
+                            <label class="custom-control-label" for="chkActivo">Activo</label>
+                        </div>
+                        <span asp-validation-for="Activo" class="text-danger ml-2"></span>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="form-group row mt-4">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary ml-2">
+                            Cancelar
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
