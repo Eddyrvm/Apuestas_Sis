@@ -14,6 +14,7 @@ public class ApuestasDataContext : DbContext
     public DbSet<UsuarioRol> UsuarioRoles { get; set; } = default!;
     public DbSet<TipoJuego> TipoJuego { get; set; } = default!;
     public DbSet<ModalidadApuesta> ModalidadApuestas { get; set; } = default!;
+    public DbSet<Sorteo> Sorteos { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

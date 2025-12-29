@@ -1,0 +1,107 @@
+﻿@model Apuestas_Sis.Models.Sorteo
+
+@{
+    ViewData["Title"] = "Crear Sorteo";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Crear Sorteo</h1>
+
+    <a asp-action="Index" class="btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i>
+        Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Información del sorteo</h6>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post" autocomplete="off">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <!-- Tipo de juego -->
+                    <div class="form-group">
+                        <label asp-for="TipoJuegoId" class="control-label"></label>
+                        <select asp-for="TipoJuegoId" class="custom-select" asp-items="ViewBag.TipoJuegoId">
+                            <option value="">-- Seleccione un tipo de juego --</option>
+                        </select>
+                        <span asp-validation-for="TipoJuegoId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Modalidad -->
+                    <div class="form-group">
+                        <label asp-for="ModalidadApuestaId" class="control-label"></label>
+                        <select asp-for="ModalidadApuestaId" class="custom-select" asp-items="ViewBag.ModalidadApuestaId">
+                            <option value="">-- Seleccione una modalidad --</option>
+                        </select>
+                        <span asp-validation-for="ModalidadApuestaId" class="text-danger"></span>
+                    </div>
+
+                    <!-- Nombre -->
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+
+                    <!-- Fecha del sorteo -->
+                    <div class="form-group">
+                        <label asp-for="FechaSorteo" class="control-label"></label>
+                        <input asp-for="FechaSorteo"
+                               type="datetime-local"
+                               class="form-control"
+                               value="@(Model.FechaSorteo == default ? "" : Model.FechaSorteo.ToString("yyyy-MM-ddTHH:mm"))" />
+                        <span asp-validation-for="FechaSorteo" class="text-danger"></span>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="form-group">
+                        <label asp-for="Estado" class="control-label"></label>
+                        <select asp-for="Estado" class="custom-select">
+                            <option value="">-- Seleccione estado --</option>
+                            <option value="ABIERTO">ABIERTO</option>
+                            <option value="CERRADO">CERRADO</option>
+                            <option value="ANULADO">ANULADO</option>
+                        </select>
+                        <span asp-validation-for="Estado" class="text-danger"></span>
+                    </div>
+
+                    <!-- Activo -->
+                    <div class="form-group">
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Activo" class="custom-control-input" id="ActivoCheck" />
+                            <label class="custom-control-label" for="ActivoCheck">Activo</label>
+                        </div>
+                    </div>
+
+                    <!-- Observación -->
+                    <div class="form-group">
+                        <label asp-for="Observacion" class="control-label"></label>
+                        <textarea asp-for="Observacion" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Observacion" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save fa-sm"></i>
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
